@@ -1,0 +1,158 @@
+# Confirmed mappings reused from openshift-eng/ai-helpers plugins/compliance.
+# Match exact values before prefixes, and prefixes before keywords.
+direct_repositories:
+  operator_sdk:
+    repository: "https://github.com/openshift/ocp-release-operator-sdk"
+    exact_images:
+      - "operator-sdk"
+      - "openshift4/ose-operator-sdk-rhel8"
+      - "openshift4/ose-operator-sdk-rhel9"
+      - "openshift-enterprise-operator-sdk-container"
+      - "openshift4/ose-helm-operator"
+      - "openshift4/ose-helm-rhel9-operator"
+      - "openshift-enterprise-helm-operator-container"
+      - "pkg:oci/ose-operator-sdk-rhel8"
+      - "pkg:oci/ose-operator-sdk-rhel9"
+      - "pkg:oci/ose-helm-operator"
+      - "pkg:oci/openshift-enterprise-helm-operator"
+  ansible_operator:
+    repository: "https://github.com/openshift/ansible-operator-plugins"
+    exact_images:
+      - "ansible-operator-plugins"
+      - "openshift4/ose-ansible-operator"
+      - "openshift4/ose-ansible-rhel9-operator"
+      - "openshift-enterprise-ansible-operator-container"
+      - "pkg:oci/ose-ansible-operator"
+      - "pkg:oci/ose-ansible-rhel9-operator"
+    keywords: ["ansible-operator"]
+  cert_manager_operator:
+    repository: "https://github.com/openshift/cert-manager-operator"
+    exact_images:
+      - "cert-manager-operator-container"
+      - "cert-manager-operator-rhel9"
+      - "cert-manager/cert-manager-operator-rhel9"
+      - "cert-manager/cert-manager-operator-bundle"
+    keywords: ["cert-manager-operator", "cert-manager-operator-bundle"]
+  cert_manager_istio_csr:
+    repository: "https://github.com/openshift/cert-manager-istio-csr"
+    exact_images: ["cert-manager/cert-manager-istio-csr-rhel9"]
+    keywords: ["cert-manager-istio-csr"]
+  jetstack_cert_manager:
+    repository: "https://github.com/openshift/jetstack-cert-manager"
+    exact_images:
+      - "cert-manager/jetstack-cert-manager-rhel9"
+      - "cert-manager/jetstack-cert-manager-acmesolver-rhel9"
+      - "jetstack-cert-manager-rhel9"
+      - "jetstack-cert-manager-container"
+      - "jetstack-cert-manager-acmesolver-rhel9"
+      - "jetstack-cert-manager-acmesolver-container"
+    prefixes: ["redhat-user-workloads/jetstack-cert-manager-"]
+    keywords: ["jetstack-cert-manager"]
+  spire_operator:
+    repository: "https://github.com/openshift/spire-operator"
+    exact_images:
+      - "zero-trust-workload-identity-manager/zero-trust-workload-identity-manager-rhel9"
+      - "zero-trust-workload-identity-manager/zero-trust-workload-identity-manager-operator-bundle"
+    keywords: ["zero-trust-workload-identity-manager"]
+  spiffe_spire:
+    repository: "https://github.com/openshift/spiffe-spire"
+    exact_images:
+      - "zero-trust-workload-identity-manager/spiffe-spire-agent-rhel9"
+      - "zero-trust-workload-identity-manager/spiffe-spire-server-rhel9"
+      - "zero-trust-workload-identity-manager/spiffe-spire-oidc-discovery-provider-rhel9"
+    prefixes:
+      - "redhat-user-workloads/spiffe-spire-agent-"
+      - "redhat-user-workloads/spiffe-spire-server-"
+      - "redhat-user-workloads/spiffe-spire-oidc-discovery-provider-"
+    keywords: ["spire-agent", "spire-server", "spire-oidc"]
+  spiffe_spire_controller_manager:
+    repository: "https://github.com/openshift/spiffe-spire-controller-manager"
+    exact_images: ["zero-trust-workload-identity-manager/spiffe-spire-controller-manager-rhel9"]
+    keywords: ["spire-controller-manager"]
+  spiffe_csi:
+    repository: "https://github.com/openshift/spiffe-spiffe-csi"
+    exact_images: ["zero-trust-workload-identity-manager/spiffe-csi-driver-rhel9"]
+    prefixes: ["redhat-user-workloads/spiffe-csi-driver-"]
+    keywords: ["spiffe-csi-driver"]
+  spiffe_helper:
+    repository: "https://github.com/openshift/spiffe-spiffe-helper"
+    exact_images: ["zero-trust-workload-identity-manager/spiffe-helper-rhel9"]
+    keywords: ["spiffe-helper"]
+  must_gather:
+    repository: "https://github.com/openshift/must-gather"
+    exact_images: ["openshift4/ose-must-gather-rhel9"]
+  must_gather_operator:
+    repository: "https://github.com/openshift/must-gather-operator"
+    exact_images: ["openshift4/ose-support-log-gather-rhel9-operator"]
+  secrets_store_csi_operator:
+    repository: "https://github.com/openshift/secrets-store-csi-driver-operator"
+    exact_images:
+      - "openshift4/ose-secrets-store-csi-driver-rhel9-operator"
+      - "openshift4/ose-secrets-store-csi-driver-operator-bundle"
+      - "ose-secrets-store-csi-driver-operator-container"
+      - "openshift4/ose-secrets-store-csi-mustgather-rhel9"
+      - "ose-secrets-store-csi-mustgather-container"
+    keywords:
+      - "secrets-store-csi-mustgather"
+      - "secrets-store-csi-driver-operator"
+      - "secrets-store-csi-driver-operator-bundle"
+  secrets_store_csi_driver:
+    repository: "https://github.com/openshift/secrets-store-csi-driver"
+    exact_images:
+      - "openshift4/ose-secrets-store-csi-driver-rhel9"
+      - "ose-secrets-store-csi-driver-container"
+    keywords: ["secrets-store-csi-driver-rhel9"]
+
+release_submodules:
+  cert_manager:
+    release_repository: "https://github.com/openshift/cert-manager-operator-release"
+    branch_rule: "cert-manager-X-Y -> release-X.Y"
+    submodules:
+      cert-manager-operator:
+        exact_images:
+          - "cert-manager/cert-manager-operator-rhel9"
+          - "cert-manager/cert-manager-operator-bundle"
+        prefixes: ["cert-manager-operator-"]
+      cert-manager-istio-csr:
+        exact_images: ["cert-manager/cert-manager-istio-csr-rhel9"]
+      cert-manager:
+        prefixes:
+          - "cert-manager/jetstack-cert-manager-"
+          - "jetstack-cert-manager-"
+          - "redhat-user-workloads/jetstack-cert-manager-"
+  external_secrets:
+    release_repository: "https://github.com/openshift/external-secrets-operator-release"
+    branch_rule: "external-secrets-X-Y -> release-X.Y"
+    submodules:
+      external-secrets-operator:
+        exact_images:
+          - "external-secrets-operator/external-secrets-operator-rhel9"
+          - "external-secrets-operator/external-secrets-operator-bundle"
+        prefixes: ["redhat-user-workloads/external-secrets-operator-"]
+      external-secrets:
+        exact_images:
+          - "external-secrets-operator/external-secrets-rhel9"
+          - "redhat-user-workloads/external-secrets-1-0"
+      bitwarden-sdk-server:
+        exact_images: ["external-secrets-operator/bitwarden-sdk-server-rhel9"]
+        prefixes: ["redhat-user-workloads/bitwarden-sdk-server-"]
+  ztwim:
+    release_repository: "https://github.com/openshift/zero-trust-workload-identity-manager-release"
+    branch_rule: "ztwim-X.Y -> release-X.Y; ztwim-1.0 -> release-1.0.0"
+    submodules:
+      zero-trust-workload-identity-manager:
+        exact_images: ["zero-trust-workload-identity-manager/zero-trust-workload-identity-manager-rhel9"]
+        prefixes: ["zero-trust-workload-identity-manager/zero-trust-workload-identity-manager-operator-bundle"]
+      spiffe-spire:
+        exact_images: ["zero-trust-workload-identity-manager/spiffe-spire-agent-rhel9"]
+        prefixes:
+          - "zero-trust-workload-identity-manager/spiffe-spire-server"
+          - "zero-trust-workload-identity-manager/spire-oidc"
+          - "redhat-user-workloads/spiffe-spire-"
+      spiffe-spire-controller-manager:
+        exact_images: ["zero-trust-workload-identity-manager/spiffe-spire-controller-manager-rhel9"]
+      spiffe-spiffe-csi:
+        exact_images: ["zero-trust-workload-identity-manager/spiffe-csi-driver-rhel9"]
+        prefixes: ["redhat-user-workloads/spiffe-csi-driver-"]
+      spiffe-spiffe-helper:
+        exact_images: ["zero-trust-workload-identity-manager/spiffe-helper-rhel9"]

@@ -8,13 +8,17 @@ Save version-pinned manifests/configuration, setup, validation, and teardown in 
 
 Before each mutation, record a resource-ledger entry with exact environment and object identity, intended action, existing ownership, and rollback. After it succeeds, update the entry with the observed UID/ID. For modifying an existing resource, capture the minimal prior values needed to reverse the change, including whether fields were absent. Put sensitive baselines in protected local storage. Record operator reconciliation bypasses, RBAC, routes, storage, and external services as well as workload resources.
 
+If the user explicitly requests uninstalling a previous installation first, inventory its ownership, dependents, controllers/finalizers, storage, and shared resources before removal. Record this separately as authorized `removed` resources (see [records.md](records.md)); do not mislabel them as run-created resources or promise restoration from a metadata inventory. Remove consumers before their required controllers/storage interfaces and verify the requested clean baseline. Ordinary PoC cleanup still only deletes run-owned resources.
+
 If an interrupted command may have succeeded, inspect the target before retrying. Use idempotent setup where possible, but do not overwrite another run's resources just because names match. Check resource ownership and actual state.
 
 ## Test and diagnose
 
 For every attempt, record UTC time, exact safe command or runnable script reference, source/image versions, environment alias, exit code, bounded duration, expected result, actual observation, and sanitized evidence path. Inspect outputs before saving them; a successful process exit is only evidence, not an automatic pass.
 
-Record attempts append-only in the experiment's `attempts` list. For a pass, explicitly show how the acceptance criterion was met. For expected failures/negative controls, a nonzero command exit may be correct. Classify unexpected failures as environment, setup, implementation, unsupported behavior, or unresolved, with evidence supporting the diagnosis. Use `inconclusive` if competing explanations remain.
+Treat persisted state and consumer refresh as separate parts of a configuration change. A restarted process may keep old certificates, signing keys, cached credentials, or schema state; prove the newly configured path was exercised rather than accepting readiness or reuse as evidence. Distinguish a restart with retained state from a cold bootstrap, and test each when the requirement depends on recovery. For replicated trust or configuration, validate at a different consumer and include a bounded propagation observation before diagnosing failure.
+
+Record attempts append-only in the experiment's `attempts` list. Give each attempt's evidence a distinct or content-addressed path; later probes must not overwrite earlier certificates, outputs or baselines. For a pass, explicitly show how the acceptance criterion was met. For expected failures/negative controls, a nonzero command exit may be correct. Classify unexpected failures as environment, setup, implementation, unsupported behavior, or unresolved, with evidence supporting the diagnosis. Use `inconclusive` if competing explanations remain.
 
 Diagnose in dependency order: credentials/API access; installed capability/version; scheduling/storage/permissions; transport/DNS/TLS; configuration/reconciliation; identity/trust/authorization; application behavior. Correlate producer and consumer evidence across environments. Preserve the original failure before changing anything. Update the assumption and experiment plan when the hypothesis changes; do not retitle a failing test to make it pass.
 

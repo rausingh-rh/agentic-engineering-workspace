@@ -4,6 +4,8 @@ AEW is a portable collection of skills for investigating engineering requests an
 
 Give it a feature/problem statement and the relevant repositories. It learns the concepts and current implementation, checks upstream options, compares approaches, and designs experiments around the questions you need answered. Only then does it request the necessary environment access: none for local experiments, or the appropriate number of clusters, VMs, or services. After execution it explains what worked, what failed, the tradeoffs, and the hard parts of product implementation.
 
+The repository list need not be exhaustive. The skills follow relevant dependency/image pins, source links, tests, and design documents to find missing context, recording why each source matters. They distinguish the product's shipped versions from newer upstream behavior and ask only when the missing context cannot be resolved from evidence.
+
 The agent runs in your existing agent host with its tools and permissions. This repository is not a standalone daemon or a universal deployment program. The agent writes and runs feature-specific prototypes; the included Python helper keeps run records consistent and performs optional read-only Kubernetes checks. A particular feature may remain blocked or infeasible, and the report must say so.
 
 ## Skills
@@ -99,6 +101,8 @@ private/        ignored local connection references and rollback data
 Results distinguish observed behavior from documentation, inference, and untested claims. A report does not call a deployment production-ready because a happy-path demo succeeded. Experiments include relevant negative controls and lifecycle cases; a failed approach remains useful evidence. Failed cleanup is reported and blocks completion. Resources explicitly retained by the user have an owner and cleanup instructions.
 
 See the [record contract and helper commands](.agents/skills/poc/references/records.md), [design rationale](docs/poc-design.md), and [behavioral evaluation scenarios](tests/behavioral/README.md).
+
+For a short explanation, an example invocation, and a meeting demo, see the [manager briefing](docs/manager-brief.md).
 
 ## Examples
 

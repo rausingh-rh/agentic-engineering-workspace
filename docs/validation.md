@@ -4,7 +4,7 @@ Validated on 19 November 2026 (Asia/Kolkata). This records development validatio
 
 ## Automated checks
 
-`python3 -m unittest discover -s tests -v` passed **29 tests** on local Python 3.14.7 and Python 3.12. The tests cover record initialization, missing/escaping evidence, requirement coverage, recommended versus rejected approaches, blocked required tests, cleanup/retention, malformed inputs, explicit cluster targeting, bounded preflight, suppressed raw errors, skill metadata, relative links, and local symlink installation.
+`python3 -m unittest discover -s tests -v` passed **31 tests** on local Python 3.14.7. The earlier 29-test suite also passed on Python 3.12. The tests cover record initialization, missing/escaping evidence, requirement coverage, recommended versus rejected approaches, blocked required tests, cleanup/retention, explicitly authorized removal of pre-existing installations, malformed inputs, explicit cluster targeting, bounded preflight, suppressed raw errors, skill metadata, relative links, and local symlink installation.
 
 All three skills passed the skill-creator frontmatter validator. Python syntax, mapping/workflow YAML parsing, and `git diff --check` passed. CI is configured to run the offline suite on Python 3.10 and 3.14; hosted CI and Python 3.10 were not run during this local validation.
 
@@ -27,6 +27,16 @@ The forward-test found a real defect: `--ready` accepted an empty `plan.md` desp
 
 The local review copy of the full run is under `.work/validation/poc-forward-test/` in the development checkout (ignored by Git). Its historical commands refer to the original temporary run location. The scenario and fixture are committed so another reviewer can run a fresh evaluation with their chosen agent host.
 
+## Live nested SPIRE pilot
+
+The next evaluation used the user-provided target ZTWIM `main` and three upstream repositories, then two explicitly authorized dedicated OpenShift clusters. The workflow found additional authoritative context and product release pins before environment access. The [case study](../examples/nested-spire-live-validation.md) records exact versions, topology, observations and limitations; the complete local run is retained under `.work/pocs/nested-spire-main/` (ignored by Git).
+
+The pilot exercised source research, local build/tests, actual cluster preflight, an explicitly requested prior-installation uninstall, exact-main local controllers with real operands, manual nested configuration, CSI-backed consumers, bidirectional mutual TLS, child JWT verification through a parent agent, authorization negatives, persistent versus fresh bootstrap, expiry/outage recovery, operator reconciliation, and teardown. The source phase was performed in a separate agent context; the coordinating agent then owned the live run and resource ledger. This is a practical workflow evaluation with fixes during the run, not an untouched blind benchmark.
+
+Observed failures are retained alongside successful retries. They include the required OLM OperatorCondition name for local startup, pre-nesting JWT keys absent from the parent bundle, delayed consumer refresh, and expiry of a join-token bridge credential during an accelerated outage test. A consumed token did not support reattestation. Pod readiness alone was insufficient evidence for these behaviors. The final bounded configuration recovered, normal reconciliation reproduced the product gap, and teardown verified 118 new cluster resource identities and eight local operator processes absent. Both clusters were available without degraded cluster operators, and the run passed `poc.py check --complete`.
+
+The uninstall requirement exposed a record-schema gap: pre-existing objects deliberately removed with user authorization could not be represented correctly as created or modified. The ledger now supports `removed`, requires baseline and authorization references, rejects retention of a removed object, and still blocks unresolved cleanup. Two regression tests cover it. Additional execution guidance addresses persisted state, cold bootstrap and propagation to another consumer.
+
 ## Remaining qualification
 
-No live Kubernetes/OpenShift deployment or teardown was performed. Preflight command behavior was checked with mocked CLI responses. No host picker integration or end-to-end execution was tested in Claude Code, Cursor, or Copilot; their documented discovery paths are provided, and the instructions avoid host-specific APIs. Research-before-access, cleanup drift, and conflicting-evidence scenarios are available for further behavioral evaluation. A live pilot with a selected feature and authorized environment is the next qualification step.
+The pilot demonstrates one feature investigation on two clusters. It does not validate arbitrary features, production reliability, performance/capacity, OLM packaging of the exact-main local controller, or remote PSAT bootstrap. No host picker integration or end-to-end execution was tested in Claude Code, Cursor, or Copilot; documented discovery paths and portable instructions remain compatibility guidance. Hosted CI and the configured Python 3.10 job were not executed locally. Cleanup drift and conflicting-evidence scenarios remain available for further behavioral evaluation.

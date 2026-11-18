@@ -197,6 +197,32 @@ class RunTests(unittest.TestCase):
         row.update(cleanup_status="restored", baseline_ref="private/prior-fields.json")
         self.assertEqual(poc.validate(self.run, state, "complete"), [])
 
+    def test_intentional_removal_requires_scope_baseline_and_evidence(self):
+        state = self.complete()
+        row = self.resource()
+        row.update(action="removed", cleanup_status="deleted")
+        state["resources"] = [row]
+        self.assertTrue(poc.validate(self.run, state, "complete"))
+        row["baseline_ref"] = "private/pre-uninstall-inventory.json"
+        self.assertTrue(poc.validate(self.run, state, "complete"))
+        row["removal_authorization"] = "User requested complete uninstall on the dedicated test environment"
+        self.assertEqual(poc.validate(self.run, state, "complete"), [])
+        row["evidence"] = []
+        self.assertTrue(poc.validate(self.run, state, "complete"))
+
+    def test_intentional_removal_completion_requires_deleted_or_restored(self):
+        state = self.complete()
+        row = self.resource()
+        row.update(action="removed", baseline_ref="private/prior.json",
+                   removal_authorization="User requested removing prior test installation")
+        state["resources"] = [row]
+        for status in ("pending", "failed", "retained"):
+            row.update(cleanup_status=status, owner="team", retention_reason="Not deleted")
+            self.assertTrue(poc.validate(self.run, state, "complete"))
+        for status in ("deleted", "restored"):
+            row["cleanup_status"] = status
+            self.assertEqual(poc.validate(self.run, state, "complete"), [])
+
     def test_malformed_records_return_errors_not_exceptions(self):
         for value in (None, [], "invalid"):
             self.assertTrue(poc.validate(self.run, value))

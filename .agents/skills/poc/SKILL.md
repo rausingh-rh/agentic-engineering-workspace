@@ -20,7 +20,7 @@ This skill runs inside the current agent host using its research, file, shell, a
 
 ### 1. Learn the feature and the current product
 
-Read [discovery.md](references/discovery.md). Use [repository-resolution](../repository-resolution/SKILL.md) for every relevant repository. Investigate primary documentation, existing upstream implementations, code paths, lifecycle, and conceptual boundaries. Distinguish current product behavior, upstream capability, and proposed behavior. Reconcile contradictions rather than repeating an old recommendation.
+Read [discovery.md](references/discovery.md). Use [repository-resolution](../repository-resolution/SKILL.md) for every relevant repository. Discover missing context from source links, dependency/image pins, tests, and design documents; the user's initial repo list is a starting point. Record why each added source is needed and stop expansion at the feature's critical path. Investigate primary documentation, existing upstream implementations, code paths, lifecycle, and conceptual boundaries. Distinguish current product behavior, upstream capability, and proposed behavior. Reconcile contradictions rather than repeating an old recommendation.
 
 Write `research.md` with versioned sources, concept explanations, a feature-focused repository map, assumptions, and competing approaches with pros, cons, prerequisites, and hard implementation work. Research should explain *why* an approach might fail and identify experiments that could disprove it. Do not invent alternative approaches merely to fill a table.
 

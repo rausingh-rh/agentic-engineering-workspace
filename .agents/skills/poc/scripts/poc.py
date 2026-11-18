@@ -202,7 +202,7 @@ def validate(directory, state, gate=None):
         need(isinstance(row.get("environment_id"), str) and row["environment_id"] in environments,
              f"{key}: unknown environment_id")
         action, cleanup = row.get("action"), row.get("cleanup_status")
-        need(choice(action, {"created", "modified"}), f"{key}: invalid action")
+        need(choice(action, {"created", "modified", "removed"}), f"{key}: invalid action")
         need(choice(cleanup, {"pending", "deleted", "restored", "retained", "failed"}),
              f"{key}: invalid cleanup_status")
         if action == "modified":
@@ -210,6 +210,9 @@ def validate(directory, state, gate=None):
             need(cleanup != "deleted", f"{key}: cannot delete a pre-existing modified resource")
         if action == "created":
             need(cleanup != "restored", f"{key}: created resource must be deleted or retained")
+        if action == "removed":
+            fields(row, ("baseline_ref", "removal_authorization"), key)
+            need(cleanup != "retained", f"{key}: removed resource must be deleted or restored")
         if cleanup == "retained":
             fields(row, ("owner", "retention_reason"), key)
         if choice(cleanup, {"deleted", "restored", "retained"}):

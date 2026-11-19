@@ -2,11 +2,9 @@
 
 ## A 45-second explanation
 
-“We repeatedly build proofs of concept to understand new features before committing to an implementation. The work includes learning the concepts, reading several repositories, comparing approaches, testing failures, and explaining the tradeoffs. Much of that investigation process is repeated each time.
+“We repeat the same investigation whenever a new feature needs a PoC: learn the concepts, read the code, compare approaches, and test what can fail. We have packaged that process as three reusable skills for our existing coding agents.
 
-“This project packages that process as reusable skills for our existing coding agents. We give it the feature and target repositories. It researches the current product and upstream implementations, discovers relevant missing context, and designs experiments. It then asks for the environments those experiments need, builds and tests a small prototype, and produces evidence, a reproducible runbook, and implementation guidance.
-
-“The goal is to make feature decisions better informed and PoCs repeatable. A failed approach is a useful result if the experiment explains why it failed.”
+“We provide the feature and target repository. The agent discovers related context, researches the implementation, designs experiments, requests the required environments, and executes the PoC. It produces evidence, tradeoffs, implementation risks, and reproducible steps, then verifies cleanup. This helps us decide what to build and what still needs investigation.”
 
 ## What exactly have we built?
 
@@ -21,6 +19,17 @@
 | Host agent and tools | Reason about the feature, read sources, write the prototype, and execute commands within the agreed scope. |
 
 The helper does not implement arbitrary features, judge whether evidence is true, or grant access. Feature-specific manifests, code, and tests are produced during each investigation.
+
+## What the user supplies and what the agent discovers
+
+| Input | Who provides it? |
+| --- | --- |
+| Feature/problem, intended decision, starting repository and relevant ref | User; the agent clarifies any ambiguity that changes the investigation. |
+| Related repositories, specifications, dependency versions, relevant tests and implementation paths | Agent discovers these from authoritative source links and records provenance. User-supplied context is also welcome. |
+| Existing understanding, platform constraints, success criteria | User when known; the agent turns assumptions into questions and experiments. |
+| Environment access and permitted changes | User after research identifies the number and roles of environments. |
+
+An exhaustive repository list is unnecessary. The agent distinguishes shipped dependency versions from newer upstream behavior and asks when private access, conflicting evidence, or an unresolved requirement prevents progress. It does not guess business requirements from code.
 
 ## How a run works
 
@@ -48,13 +57,14 @@ Example:
 Use the poc skill to investigate and execute a nested SPIRE PoC.
 Target: https://github.com/rausingh-rh/zero-trust-workload-identity-manager,
 branch main.
-Related sources: spiffe/spire, spiffe/spire-controller-manager, spiffe/spiffe-csi.
-Discover any additional relevant source context.
+Discover the related repositories and concepts needed from the target source.
 Explain the trust hierarchy and current product support, compare implementation
 approaches, and test bootstrap, workload identity, negative controls, restart,
 and certificate renewal. Research first, then request the required environments.
 Produce evidence, tradeoffs, hard implementation work, and a reproducible runbook.
 ```
+
+This example deliberately supplies only the target repository: finding relevant related sources is part of the workflow. Paste the request into the agent chat. Running `python3 .../poc.py` alone does **not** launch an investigation; it only runs the helper commands.
 
 Run output defaults to `.work/pocs/<run-id>/`: `research.md`, `plan.md`, `run.json`, prototype artifacts, sanitized evidence, `runbook.md`, and `report.md`.
 

@@ -20,7 +20,7 @@ The agent runs in your existing agent host with its tools and permissions. This 
 
 ## Use it
 
-In a host with slash-command skills, invoke `/poc` (or `/aew` with an execution request). In Codex, use `$poc` / `$aew`. If your host lacks a skill picker, ask it to read `.agents/skills/poc/SKILL.md` and follow it.
+In a host with slash-command skills, invoke `/poc` (or `/aew` with an execution request). In Codex, use `$poc` / `$aew`. If your host lacks a skill picker, ask it to read `.agents/skills/poc/SKILL.md` and follow it. Send the request in the agent chat: `poc.py` is a record/preflight helper, not an agent launcher.
 
 ```text
 Use the poc skill to investigate and execute a proof of concept for <feature>.
@@ -112,7 +112,7 @@ For a short explanation, an example invocation, and a meeting demo, see the [man
 - [Workload identity for VMs](examples/vm-identity-poc.md)
 - [A local API/library experiment](examples/local-api-poc.md)
 
-Examples describe requests and expected investigation behavior, not newly verified product results.
+The examples above describe requests and expected investigation behavior. For executed results, see the [nested SPIRE pilot case study](examples/nested-spire-live-validation.md), including observed failures, recovery, product gaps, and cleanup.
 
 ## Development and validation
 
@@ -122,7 +122,7 @@ python3 -m unittest discover -s tests -v
 
 Tests exercise run creation, evidence containment, completion/coverage rules, retained and restored resources, read-only preflight argument targeting, timeouts, and error redaction. They run offline and do not use a real kubeconfig or cluster. Behavioral evaluations complement these checks; read their instructions before running a new scenario. Passing these tests does not establish live feature behavior or verify every agent host.
 
-See the [validation record](docs/validation.md) for executed checks, the independent local PoC, the defect it exposed and the fix, and remaining live/host qualification.
+See the [validation record](docs/validation.md) for executed checks, the independent local PoC, the defect it exposed and the fix, the executed two-cluster pilot, and remaining qualification across agent hosts and feature scenarios.
 
 ## Boundaries
 
